@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Service
+// @Service
 public class EmqxService {
-
     @Autowired
     private BookingTokenRepository bookingTokenRepository;
 
@@ -49,18 +49,18 @@ public class EmqxService {
             options.setCleanSession(true);
 
             mqttClient.connect(options);
-            System.out.println("✅ Connected to EMQX at: " + brokerUrl);
+            System.out.println("Connected to EMQX at: " + brokerUrl);
 
             mqttClient.subscribe(bookingTopic, (topic, msg) -> {
                 String payload = new String(msg.getPayload());
-                System.out.println("📨 Received MQTT message: " + payload);
+                System.out.println("Received MQTT message: " + payload);
                 processBookingMessage(payload);
             });
 
-            System.out.println("📡 Subscribed to: " + bookingTopic);
+            System.out.println("Subscribed to: " + bookingTopic);
 
         } catch (MqttException e) {
-            System.err.println("❌ Failed to connect to EMQX: " + e.getMessage());
+            System.err.println("Failed to connect to EMQX: " + e.getMessage());
         }
     }
 
@@ -83,10 +83,10 @@ public class EmqxService {
             );
             bookingTokenRepository.save(bookingToken);
 
-            System.out.println("💾 Saved token via MQTT: " + token + " for door: " + doorId);
+            System.out.println("Saved token via MQTT: " + token + " for door: " + doorId);
 
         } catch (Exception e) {
-            System.err.println("❌ Error processing MQTT message: " + e.getMessage());
+            System.err.println("Error processing MQTT message: " + e.getMessage());
         }
     }
 
@@ -95,10 +95,10 @@ public class EmqxService {
         try {
             if (mqttClient != null && mqttClient.isConnected()) {
                 mqttClient.disconnect();
-                System.out.println("🔌 Disconnected from EMQX");
+                System.out.println("Disconnected from EMQX");
             }
         } catch (MqttException e) {
-            System.err.println("❌ Error disconnecting: " + e.getMessage());
+            System.err.println("Error disconnecting: " + e.getMessage());
         }
     }
 }
